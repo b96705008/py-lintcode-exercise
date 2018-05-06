@@ -34,7 +34,7 @@ def search_big_array(nums, target):
         while end > start and query(nums, end) == EOF:
             end = end - 1
 
-        if query(nums, end) == EOF or end < start:
+        if end < start or query(nums, end) == EOF:
             return None, None
 
         return start, end
