@@ -14,6 +14,7 @@ def find_max_in_mountain(nums):
 	if nums is None or len(nums) == 0:
 		return None
 
+	# == Recursive ==
 	def helper(nums, start, end):
 		if start + 1 < end:
 			mid = start + (end - start) / 2
@@ -33,6 +34,7 @@ def find_max_in_mountain(nums):
 		return max(nums[start], nums[end])
 
 	return helper(nums, 0, len(nums)-1)
+
 
 def testing(nums, ans):
 	sol = find_max_in_mountain(nums)

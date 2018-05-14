@@ -23,29 +23,45 @@ def find_closet_num(A, target):
 	if A is None or len(A) == 0:
 		return -1
 
-	min_index = 0
-	max_index = len(A) - 1
-	if target <= A[min_index]:
-		return min_index
-	if target >= A[max_index]:
-		return max_index
+	start = 0
+	end = len(A) - 1
+	if target <= A[start]:
+		return start
+	if target >= A[end]:
+		return end
 
-	def helper(nums, start, end, target):
-		if start + 1 < end:
-			mid = start + (end - start) / 2
-			if target == nums[mid]:
-				return mid
-			elif target < nums[mid]:
-				return helper(nums, start, mid, target)
-			elif target > nums[mid]:
-				return helper(nums, mid, end, target)
+	# == Recursive ==
+	# def helper(nums, start, end, target):
+	# 	if start + 1 < end:
+	# 		mid = start + (end - start) / 2
+	# 		if target == nums[mid]:
+	# 			return mid
+	# 		elif target < nums[mid]:
+	# 			return helper(nums, start, mid, target)
+	# 		elif target > nums[mid]:
+	# 			return helper(nums, mid, end, target)
 
-		if target - nums[start] < nums[end] - target:
-			return start
+	# 	if target - nums[start] < nums[end] - target:
+	# 		return start
+	# 	else:
+	# 		return end
+
+	# return helper(A, start, end, target)
+
+	# == For Loop ==
+	while start + 1 < end:
+		mid = start + (end - start) / 2
+		if target == A[mid]:
+			return mid
+		elif target < A[mid]:
+			end = mid
 		else:
-			return end
+			start = mid
 
-	return helper(A, min_index, max_index, target)
+	if target - A[start] < A[end] - target:
+		return start
+	else:
+		return end
 
 
 def testing(nums, target, ans):
