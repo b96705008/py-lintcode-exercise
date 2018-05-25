@@ -4,6 +4,7 @@ class TreeNode(object):
 		self.val = val
 		self.left = None
 		self.right = None
+		self.parent = None
 
 	@property
 	def child_num(self):
