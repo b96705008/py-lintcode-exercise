@@ -57,71 +57,52 @@ root2.right.left = TreeNode(1)
 root2.right.right = TreeNode(2)
 
 
-def get_up_paths(root):
-    curr_paths = []
-
-    if root is None:
-        return curr_paths
-
-    curr_paths.append([root.val])
-
-    up_paths = [
-        p + [root.val]
-        for p in get_up_paths(root.left) + \
-            get_up_paths(root.right)
-    ]
-
-    curr_paths.extend(up_paths)
-    return curr_paths
-
-def get_down_paths(root):
-    curr_paths = []
-
-    if root is None:
-        return curr_paths
-
-    curr_paths.append([root.val])
-
-    down_paths = [
-        [root.val] + p
-        for p in get_down_paths(root.left) + \
-            get_down_paths(root.right)
-    ]
-
-    curr_paths.extend(down_paths)
-    return curr_paths
-
-
 def find_sum_paths(root, target):
     paths = []
 
     def traverse(root, target, paths):
         if root is None:
-            return
+            return [], []
 
+        # recursive first
+        lu_paths, ld_paths = traverse(root.left, target, paths)
+        ru_paths, rd_paths = traverse(root.right, target, paths)
+
+        # check node
         if root.val == target:
             paths.append([root.val])
-
-        # clockwise
+ 
+        # clockwise check
         for p in [ 
             r + [root.val] + l
-            for r in [[]] + get_up_paths(root.right)
-            for l in [[]] + get_down_paths(root.left)
+            for r in [[]] + ru_paths
+            for l in [[]] + ld_paths
             if len(r) != 0 or len(l) != 0]:
             if sum(p) == target:
                 paths.append(p)
 
-        # counter clockwise
+        # counter clockwise check
         for p in [
             l + [root.val] + r
-            for l in [[]] + get_up_paths(root.left)
-            for r in [[]] + get_down_paths(root.right)
+            for l in [[]] + lu_paths
+            for r in [[]] + rd_paths
             if len(r) != 0 or len(l) != 0]:
             if sum(p) == target:
                 paths.append(p)
-                                                               
-        traverse(root.left, target, paths)
-        traverse(root.right, target, paths)
+        
+        # all up paths
+        up_paths = [
+            up + [root.val]
+            for up in [[]] + lu_paths + ru_paths
+        ]
+
+        # all down paths
+        down_paths = [
+            [root.val] + dp
+            for dp in [[]] + ld_paths + rd_paths
+        ]
+        
+        return up_paths, down_paths
 
     traverse(root, target, paths)
     return paths
