@@ -29,7 +29,7 @@ class Solution:
             return head
 
         dummy = ListNode('dummy', head)
-        
+
         left = dummy
         while left != None:
             left = self.reverse_and_return_left(k, left)
