@@ -19,6 +19,15 @@ def create_linked_list(values):
     return head
 
 
+def find_mid(head, tail=None):
+        slow = head
+        fast = head.next
+        while fast != tail and fast.next != tail:
+            fast = fast.next.next
+            slow = slow.next
+        
+        return slow
+
 def print_list(node):
     while node is not None:
         print node.val, '->',
@@ -27,19 +36,35 @@ def print_list(node):
 
 
 if __name__ == '__main__':
+    head = create_linked_list(range(1, 4))
+    print_list(head)
+
+    # find mid
+    mid = find_mid(head)
+    print mid.val
+
+    mid = find_mid(ListNode(5))
+    print mid.val
+
+
     head = create_linked_list(range(0, 4))
     print_list(head)
 
-    left_node = head
-    next_node = head.next.next
-    prev_node = head.next
+    mid = find_mid(head, head.next.next.next)
+    print mid.val
 
-    # reverse
-    last = next_node.next
-    next_node.next = prev_node
-    prev_node.next = last
-    left_node.next = next_node
+    # left_node = head
+    # next_node = head.next.next
+    # prev_node = head.next
 
-    print_list(left_node)
+    # # reverse
+    # last = next_node.next
+    # next_node.next = prev_node
+    # prev_node.next = last
+    # left_node.next = next_node
+
+    # print_list(left_node)
+
+    
 
 
