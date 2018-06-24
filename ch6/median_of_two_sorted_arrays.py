@@ -26,17 +26,17 @@ class Solution:
     def find_kth(self, k, A, a, B, b):
         m = len(A)
         n = len(B)
+
+        if a < m and b >= n:
+            return A[a+k-1]
+
+        if a >= m and b < n:
+            return B[b+k-1]
+        
         result = None
         index = 0
-
         while index < k:
-            if a < m and b >= n:
-                result = A[a]
-                a = a + 1
-            elif a >= m and b < n:
-                result = B[b]
-                b = b + 1
-            elif A[a] < B[b]:
+            if A[a] < B[b]:
                 result = A[a]
                 a = a + 1
             else:
@@ -66,10 +66,10 @@ class Solution:
         # find median
         kth = self.find_kth(k, A, a, B, b)
         if is_odd:
-            return kth
+            return float(kth)
         
         k_1th = self.find_kth(k+1, A, a, B, b)
-        return (kth + k_1th) / 2.
+        return float(kth + k_1th) / 2.
 
 
 if __name__ == '__main__':
@@ -78,7 +78,7 @@ if __name__ == '__main__':
     m = sol.findMedianSortedArrays(
         [1,2,3], 
         [4,5])
-    print m, 3.
+    print 'result', m, 3.
 
     m = sol.findMedianSortedArrays(
         [1,2,3,4,5,6], 
