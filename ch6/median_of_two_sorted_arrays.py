@@ -50,16 +50,14 @@ class Solution:
         # write your code here
 
         # init variables
-        m = len(A)
-        n = len(B)
+        m, n = len(A), len(B)
         is_odd = (m + n) % 2 == 1
         k = (m + n) / 2
         if is_odd:
             k = k + 1
 
         # excluse half k
-        a = 0
-        b = 0
+        a, b = 0, 0
         while k > 1 and a < m and b < n:
             k, a, b = self.exclude_half_k(k, A, a, B, b)
 
