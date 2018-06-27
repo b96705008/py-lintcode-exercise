@@ -29,10 +29,9 @@ class Solution:
         for i in range(1, len(nums)+1):
             cur_sum = sums[i-1] + nums[i-1] - mid
             sums.append(cur_sum)
-            if i >= k and cur_sum - min_pre >= 0:
-                return True
-
             if i >= k:
+                if cur_sum - min_pre >= 0:
+                    return True
                 min_pre = min(min_pre, sums[i-k+1])
             
         return False
