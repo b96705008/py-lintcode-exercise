@@ -62,16 +62,11 @@ class Solution:
         nums.sort() 
         unique_cnt = 1
         l = 0
-        r = 1
-        while l < n and r < n:
-            while r < n and nums[r] == nums[l]:
-                r = r + 1
-
-            if r < n:
-                unique_cnt = unique_cnt + 1
+        for r in range(len(nums)):
+            if nums[r] != nums[l]:
                 l = l + 1
                 nums[l], nums[r] = nums[r], nums[l]
-                r = r + 1
+                unique_cnt = unique_cnt + 1
 
         print nums, unique_cnt
         return unique_cnt
