@@ -1,6 +1,6 @@
 # py-lintcode-exercise
 
-## Chapters
+## Basic Content
 1. strStr
 2. Binary Search
 3. Binary Tree & Divide Conquer 
