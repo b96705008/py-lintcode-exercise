@@ -77,6 +77,7 @@ def build_office(grid):
     n_col = len(grid[0])
     house_num = 0
 
+
     # iterate all places
     for i in range(n_row):
         for j in range(n_col):
