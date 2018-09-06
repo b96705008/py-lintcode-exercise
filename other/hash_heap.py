@@ -4,15 +4,13 @@ class Node:
         self.index = index
         self.cnt = cnt
 
-    def update_index(self, index):
-        self.index = index
-
 
 class HashHeap:
 
-    def __init__(self):
-        self.min_heap = []
-        self.hash_map = {}
+    def __init__(self, desc=False):
+        self.desc = desc
+        self.heap = []
+        self.hash = {}
         self.size = 0
 
     def parent_index(self, index):
@@ -28,32 +26,35 @@ class HashHeap:
         return self.size == 0
 
     def qsize(self):
-        return len(self.min_heap)
+        return len(self.heap)
 
     def top(self):
-        return self.min_heap[0]
+        return self.heap[0]
 
-    def add(self, val):
+    def contains(self, val):
+        return val in self.hash
+
+    def push(self, val):
         self.size += 1
 
-        if val in self.hash_map:
-            self.hash_map[val].cnt += 1
+        if val in self.hash:
+            self.hash[val].cnt += 1
         else:
-            self.min_heap.append(val)
-            self.hash_map[val] = Node(self.qsize()-1, 1)
-            self.shift_up(self.qsize()-1)
+            self.heap.append(val)
+            self.hash[val] = Node(self.qsize()-1, 1)
+            self._shift_up(self.qsize()-1)
 
-    def poll(self):
+    def pop(self):
         self.size -= 1
         val = self.top()
-        node = self.hash_map[val]
+        node = self.hash[val]
 
         if node.cnt == 1:
-            self.swap(0, self.qsize()-1)
-            self.min_heap.pop()
-            del self.hash_map[val]
+            self._swap(0, self.qsize()-1)
+            self.heap.pop()
+            del self.hash[val]
             if not self.empty():
-                self.shift_down(0)
+                self._shift_down(0)
         else:
             node.cnt -= 1
 
@@ -61,87 +62,96 @@ class HashHeap:
 
     def delete(self, val):
         self.size -= 1
-        node = self.hash_map[val]
+        node = self.hash[val]
 
         if node.cnt == 1:
             index = node.index
-            self.swap(index, self.qsize()-1)
-            self.min_heap.pop()
-            del self.hash_map[val]
+            self._swap(index, self.qsize()-1)
+            self.heap.pop()
+            del self.hash[val]
 
             # in the middlde
             if index < self.qsize():
-                self.shift_up(index)
-                self.shift_down(index)
+                self._shift_up(index)
+                self._shift_down(index)
         else:
             node.cnt -= 1
 
-    def smaller(self, i1, i2):
-        return self.min_heap[i1] < self.min_heap[i2]
+    def _smaller(self, i1, i2):
+        if not self.desc:
+            return self.heap[i1] < self.heap[i2]
+        else:
+            return self.heap[i2] < self.heap[i1]
 
-    def swap(self, i1, i2):
-        v1 = self.min_heap[i1]
-        v2 = self.min_heap[i2]
-        n1 = self.hash_map[v1]
-        n2 = self.hash_map[v2]
+    def _swap(self, i1, i2):
+        v1 = self.heap[i1]
+        v2 = self.heap[i2]
+        n1 = self.hash[v1]
+        n2 = self.hash[v2]
         # swqp hash
-        n1.update_index(i2)
-        n2.update_index(i1)
+        n1.index = i2
+        n2.index = i1
         # swap heap
-        self.min_heap[i1], self.min_heap[i2] = self.min_heap[i2], self.min_heap[i1]
+        self.heap[i1] = v2
+        self.heap[i2] = v1
 
-    def shift_up(self, index):
+    def _shift_up(self, index):
         while index > 0:
             parent = self.parent_index(index)
-            if not self.smaller(index, parent):
+            if not self._smaller(index, parent):
                 break
-            self.swap(index, parent)
+            self._swap(index, parent)
             index = parent
 
-    def shift_down(self, index):
+    def _shift_down(self, index):
         while self.left_index(index) < self.qsize():
             index
             left = self.left_index(index)
             right = self.right_index(index)
 
             child = left
-            if right < self.qsize() and self.smaller(right, child):
+            if right < self.qsize() and self._smaller(right, child):
                 child = right
 
-            if self.smaller(child, index):
-               self.swap(child, index)
+            if self._smaller(child, index):
+               self._swap(child, index)
                index = child
             else:
                 break
 
 
 if __name__ == '__main__':
-    hh = HashHeap()
-    hh.add(1)
-    #print hh.top()
+    print '=== Min HashHeap =='
+    # hh = HashHeap()
+    # hh.push(1)
+    # hh.push(80)
+    # hh.push(60)
+    # hh.push(90)
+    # hh.push(70)
+    # hh.push(75)
+    # hh.push(100)
+    # hh.push(150)
+    # hh.delete(60)
+    # print hh.pop()
+    # print hh.pop()
 
-    hh.add(80)
-    #print hh.top()
+    # hh.delete(100)
 
-    hh.add(60)
-    #print hh.top()
+    # while not hh.empty():
+    #     print hh.pop()
 
-    hh.add(90)
-    hh.add(70)
-    hh.add(75)
-    hh.add(100)
-    hh.add(150)
+    print '=== Max HashHeap =='
+    hh = HashHeap(True)
+    hh.push((1, 0))
+    hh.push((2, 0))
+    hh.push((2, 1))
+    print hh.pop()
 
-    print hh.poll()
-    hh.delete(90)
-
-    print hh.poll()
-    print hh.poll()
-
-    hh.delete(100)
-    
+    hh.push((7, 3))
+    hh.delete((1, 0))
     while not hh.empty():
-        print hh.poll()
+        print hh.pop()
+
    
 
 

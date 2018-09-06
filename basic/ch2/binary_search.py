@@ -6,24 +6,34 @@ class Solution:
     """
     def findPosition(self, nums, target):
         # write your code here
-        if nums is None or len(nums) == 0:
+        if not nums:
             return -1
-        
-        def helper(nums, start, end, target):
-            if start + 1 < end:
-                mid = start + (end - start) / 2
-                if nums[mid] == target:
-                    return mid
-                elif nums[mid] < target:
-                    return helper(nums, mid+1, end, target)
-                elif nums[mid] > target:
-                    return helper(nums, start, mid-1, target)
-                    
-            if nums[start] == target:
-                return start
-            elif nums[end] == target:
-                return end
+
+        start = 0
+        end = len(nums) - 1
+        while start + 1 < end:
+            mid = start + (end - start) / 2
+            if target > nums[mid]:
+                start = mid
             else:
-                return -1
-        
-        return helper(nums, 0, len(nums)-1, target)
+                end = mid
+
+        if nums[start] == target:
+            return start
+        elif nums[end] == target:
+            return end
+
+        return -1
+
+
+if __name__ == '__main__':
+    sol = Solution()
+    
+    arr = [1, 2, 4, 6, 7, 9]
+    print sol.findPosition(arr, 4), 2
+    print sol.findPosition(arr, 1), 0
+    print sol.findPosition(arr, 9), 5
+
+    arr = [1, 2, 2, 3, 4]
+    print sol.findPosition(arr, 2)
+
